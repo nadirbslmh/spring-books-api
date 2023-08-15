@@ -5,7 +5,6 @@ import com.example.booksapi.model.BookRequest;
 import com.example.booksapi.model.Response;
 import com.example.booksapi.repository.BookRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -58,7 +57,7 @@ public class BookService {
 
         if (bookData.isEmpty()) {
             return new Response<>(
-                    "book ot found",
+                    "book not found",
                     null
             );
         }
