@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-class BookServiceTest {
+class BookServiceTests {
 
     @Mock
     private BookRepository repository;
@@ -33,8 +33,8 @@ class BookServiceTest {
     @Test
     void testGetAllBooks() {
         List<Book> books = new ArrayList<>();
-        books.add(new Book(1, "Book 1", "Description 1", "Author 1", "Publisher 1"));
-        books.add(new Book(2, "Book 2", "Description 2", "Author 2", "Publisher 2"));
+        books.add(new Book(1, "Book 1", "Description 1", "Publisher 1", "Author 1"));
+        books.add(new Book(2, "Book 2", "Description 2", "Publisher 2", "Author 2"));
 
         when(repository.findAll()).thenReturn(books);
 
@@ -46,7 +46,7 @@ class BookServiceTest {
 
     @Test
     void testGetBookByIdFound() {
-        Book book = new Book(1, "Book 1", "Description 1", "Author 1", "Publisher 1");
+        Book book = new Book(1, "Book 1", "Description 1", "Publisher 1", "Author 1");
 
         when(repository.findById(1)).thenReturn(Optional.of(book));
 
@@ -68,8 +68,8 @@ class BookServiceTest {
 
     @Test
     void testCreateBook() {
-        BookRequest request = new BookRequest("New Book", "New Description", "New Author", "New Publisher");
-        Book createdBook = new Book(1, "New Book", "New Description", "New Author", "New Publisher");
+        BookRequest request = new BookRequest("New Book", "New Description", "New Publisher", "New Author");
+        Book createdBook = new Book(1, "New Book", "New Description", "New Publisher", "New Author");
 
         when(repository.save(any(Book.class))).thenReturn(createdBook);
 
@@ -99,7 +99,7 @@ class BookServiceTest {
 
     @Test
     void testUpdateBookNotFound() {
-        BookRequest request = new BookRequest("Updated Book", "Updated Description", "Updated Author", "Updated Publisher");
+        BookRequest request = new BookRequest("Updated Book", "Updated Description", "Updated  Publisher", "Updated Author");
 
         when(repository.findById(1)).thenReturn(Optional.empty());
 
