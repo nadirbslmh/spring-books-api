@@ -16,7 +16,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.*;
 
 class BookControllerTests {
@@ -88,7 +87,7 @@ class BookControllerTests {
 
     @Test
     void testCreateBookInvalidRequest() {
-        BookRequest request = new BookRequest("", "", "",""); // Invalid request with empty values
+        BookRequest request = new BookRequest("", "", "","");
 
         BindingResult bindingResult = mock(BindingResult.class);
         when(bindingResult.hasErrors()).thenReturn(true);
@@ -116,7 +115,7 @@ class BookControllerTests {
 
     @Test
     void testUpdateBookInvalidRequest() {
-        BookRequest request = new BookRequest("", "", "",""); // Invalid request with empty values
+        BookRequest request = new BookRequest("", "", "","");
 
         BindingResult bindingResult = mock(BindingResult.class);
         when(bindingResult.hasErrors()).thenReturn(true);
