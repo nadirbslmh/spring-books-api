@@ -8,6 +8,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -37,14 +38,22 @@ public class BookController {
     }
 
     @PostMapping
-    public ResponseEntity<Response<Book>> create(@Valid @RequestBody BookRequest request) {
+    public ResponseEntity<Response<Book>> create(@Valid @RequestBody BookRequest request, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return new ResponseEntity<>(new Response<>(bindingResult.getFieldErrors().toString(), null), HttpStatus.BAD_REQUEST);
+        }
+
         Response<Book> response = service.create(request);
 
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Response<Book>> update(@PathVariable("id") Integer id, @Valid @RequestBody BookRequest request) {
+    public ResponseEntity<Response<Book>> update(@PathVariable("id") Integer id, @Valid @RequestBody BookRequest request, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return new ResponseEntity<>(new Response<>(bindingResult.getFieldErrors().toString(), null), HttpStatus.BAD_REQUEST);
+        }
+
         Response<Book> response = service.update(request, id);
 
         if (response.getData() == null) {

@@ -10,11 +10,13 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.*;
 
 class BookControllerTests {
@@ -75,11 +77,25 @@ class BookControllerTests {
 
         when(service.create(request)).thenReturn(new Response<>("book created", createdBook));
 
-        ResponseEntity<Response<Book>> responseEntity = bookController.create(request);
+        BindingResult bindingResult = mock(BindingResult.class);
+
+        ResponseEntity<Response<Book>> responseEntity = bookController.create(request, bindingResult);
 
         assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
         assertEquals("book created", responseEntity.getBody().getMessage());
         assertEquals(createdBook, responseEntity.getBody().getData());
+    }
+
+    @Test
+    void testCreateBookInvalidRequest() {
+        BookRequest request = new BookRequest("", "", "",""); // Invalid request with empty values
+
+        BindingResult bindingResult = mock(BindingResult.class);
+        when(bindingResult.hasErrors()).thenReturn(true);
+
+        ResponseEntity<Response<Book>> responseEntity = bookController.create(request, bindingResult);
+
+        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
     }
 
     @Test
@@ -89,11 +105,25 @@ class BookControllerTests {
 
         when(service.update(request, 1)).thenReturn(new Response<>("book updated", updatedBook));
 
-        ResponseEntity<Response<Book>> responseEntity = bookController.update(1, request);
+        BindingResult bindingResult = mock(BindingResult.class);
+
+        ResponseEntity<Response<Book>> responseEntity = bookController.update(1, request, bindingResult);
 
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         assertEquals("book updated", responseEntity.getBody().getMessage());
         assertEquals(updatedBook, responseEntity.getBody().getData());
+    }
+
+    @Test
+    void testUpdateBookInvalidRequest() {
+        BookRequest request = new BookRequest("", "", "",""); // Invalid request with empty values
+
+        BindingResult bindingResult = mock(BindingResult.class);
+        when(bindingResult.hasErrors()).thenReturn(true);
+
+        ResponseEntity<Response<Book>> responseEntity = bookController.update(1, request, bindingResult);
+
+        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
     }
 
     @Test
@@ -102,7 +132,9 @@ class BookControllerTests {
 
         when(service.update(request, 1)).thenReturn(new Response<>("book not found", null));
 
-        ResponseEntity<Response<Book>> responseEntity = bookController.update(1, request);
+        BindingResult bindingResult = mock(BindingResult.class);
+
+        ResponseEntity<Response<Book>> responseEntity = bookController.update(1, request, bindingResult);
 
         assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
         assertEquals("book not found", responseEntity.getBody().getMessage());
