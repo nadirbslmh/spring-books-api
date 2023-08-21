@@ -4,9 +4,7 @@ REST API Application to manage books.
 
 ## Notes
 
-There are two branches in this repository:
-- `main`: contains application and unit tests.
-- `sample`: contains application only without tests for learning purposes.
+This application is used for static analysis example.
 
 ## How to Use
 1. Clone this repository.
